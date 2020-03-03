@@ -1,0 +1,28 @@
+Sub insertImages()
+Dim strTemp As String
+Dim strPath As String
+Dim strFileSpec As String
+Dim oSld As Slide
+Dim oPic As Shape
+' Edit these to suit:
+strPath = "C:\Users\12074\Desktop\cows\"
+strFileSpec = "*.jpg"
+strTemp = Dir(strPath & strFileSpec)
+Do While strTemp <> ""
+    Set oSld = ActivePresentation.Slides.Add(ActivePresentation.Slides.Count + 1, ppLayoutBlank)
+    Set oPic = oSld.Shapes.AddPicture(FileName:=strPath & strTemp, _
+    LinkToFile:=msoFalse, _
+    SaveWithDocument:=msoTrue, _
+    Left:=0, _
+    Top:=0, _
+    Width:=-1, _
+    Height:=-1)
+    ' width/height of -1 tells PPT to import the image at its "natural" size
+   With oPic
+       .Height = 0.5 * ActivePresentation.PageSetup.SlideHeight
+       .Left = 0.5 * (ActivePresentation.PageSetup.SlideWidth - .Width)
+   End With
+    ' Get the next file that meets the spec and go round again
+    strTemp = Dir
+Loop
+End Sub
